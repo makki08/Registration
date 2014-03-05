@@ -78,10 +78,10 @@ public class ControllerServlet extends HttpServlet {
         //processRequest(request, response);
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
-        if (request.getParameter("login").equals("Login")) {
+        if (request.getParameter("login") != null && request.getParameter("login").equals("Login")) {
             String username = request.getParameter("username");
             String password = request.getParameter("password");
-            Login login = new Login();
+            ServiceLogic login = new ServiceLogic();
             User user = login.authenticate(username, password);
             
             //boolean valid = login.authenticate(username, password);
@@ -98,7 +98,7 @@ public class ControllerServlet extends HttpServlet {
             if (!user.getUsername().equals("")) {
                 //request.getSession().setAttribute("makki", "makkivalue");
                 request.getSession().setAttribute("user", user);
-                response.sendRedirect("success.jsp");
+                response.sendRedirect("welcome.jsp");
                 //request.getRequestDispatcher("success.jsp").forward(request, response);
             } else {
                 request.getSession().setAttribute("errorMessage", "Invalid Username/Password");
@@ -106,8 +106,32 @@ public class ControllerServlet extends HttpServlet {
                 //request.getRequestDispatcher("index.jsp").forward(request, response);
             }
             
-        } else if (request.getParameter("login").equals("Register")){
-            out.println("Register was pressed");
+        } else if (request.getParameter("login") != null && request.getParameter("login").equals("Register")){
+            //out.println("Register was pressed");
+            response.sendRedirect("register.jsp");
+        } else if (request.getParameter("register") != null && request.getParameter("register").equals("Submit")) {
+            String first_name = request.getParameter("first_name");
+            String last_name = request.getParameter("last_name");
+            String email = request.getParameter("email");
+            String phone = request.getParameter("phone");
+            String username = request.getParameter("username");
+            String password = request.getParameter("password");
+            String password2 = request.getParameter("password2");
+            
+            ServiceLogic check = new ServiceLogic();
+            boolean checkUsername = check.checkUsername(username);
+            
+            if (checkUsername) {
+                check.insertInfo(first_name, last_name, email, phone, username, password);
+                response.sendRedirect("success.jsp");
+            } else {
+                request.getSession().setAttribute("errorMessage2", "Username already exists. Please choose another one.");
+                response.sendRedirect("register.jsp");
+            }
+            
+        } else if (request.getParameter("logout") != null && request.getParameter("logout").equals("Logout")) {
+            request.getSession().invalidate();
+            response.sendRedirect("index.jsp");
         }
     }
 

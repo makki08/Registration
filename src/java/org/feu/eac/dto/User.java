@@ -15,6 +15,7 @@ public class User {
     private String first_name;
     private String last_name;
     private String email;
+    private String phone;
     private String username;
     private String password;
 
@@ -23,6 +24,7 @@ public class User {
         this.first_name = "";
         this.last_name = "";
         this.email = "";
+        this.phone = "";
         this.username = "";
         this.password = "";
     }
@@ -57,6 +59,14 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public String getUsername() {
